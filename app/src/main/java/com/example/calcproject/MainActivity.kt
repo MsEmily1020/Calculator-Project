@@ -17,13 +17,15 @@ class MainActivity : AppCompatActivity() {
         title = "계산기"
         result = findViewById<TextView>(R.id.text)
 
+        val initBtn = findViewById<Button>(R.id.AC)
+        initBtn.setOnClickListener {
+            result.text = "0"
+        }
     }
 
     // 클릭한 버튼 id로 수행
-    fun onClick(view: View) {
-        val id = view.resources.getResourceEntryName(view.id)
-
-        when(id) {
+    fun onClick(_view: View) {
+        when(val id = _view.resources.getResourceEntryName(_view.id)) {
             "plus" -> appendResult(false, "+")          // 덧셈
             "subtract" -> appendResult(false, "-")      // 뺄셈
             "X" -> appendResult(false, "X")             // 곱셈
@@ -35,10 +37,9 @@ class MainActivity : AppCompatActivity() {
             
             // 숫자 버튼
             else -> {
-                for (i in 0..9) {
-                    if (id == "_${i}") {
-                        appendResult(true, i.toString())
-                    }
+                val number = id.substring(1).toIntOrNull()
+                if (number != null && number in 0 .. 9) {
+                    appendResult(true, number.toString())
                 }
             }
         }
@@ -46,21 +47,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun appendResult(isNumber: Boolean, value: String) {
         if (isNumber) {
-            if (result.text == "0") result.text = value
-            else result.append(value)
+            result.text = if (result.text == "0") value else result.text.toString() + value
         }
 
         else {
             if(value == "(" || value == ")") {
-                if (result.text == "0") result.text = value
-                else result.append(value)
+                result.text = if (result.text == "0") value else result.text.toString() + value
             }
 
-            else if(result.text == "0") {
-                Toast.makeText(this, "완성 되지 않은 수식", Toast.LENGTH_SHORT).show()
+            else if(result.text != "0") {
+                result.append(value)
             }
 
-            else result.append(value)
+            else Toast.makeText(this, "완성 되지 않은 수식", Toast.LENGTH_SHORT).show()
         }
     }
 }
