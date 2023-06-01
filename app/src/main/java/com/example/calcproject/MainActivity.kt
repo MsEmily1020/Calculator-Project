@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             "plus" -> appendResult("+")          // 덧셈
             "subtract" -> appendResult("-")      // 뺄셈
             "multiply" -> appendResult("x")      // 곱셈
-            "division" -> appendResult("/")      // 나누기(몫)
+            "division" -> appendResult("÷")      // 나누기(몫)
             "remain" -> appendResult("%")        // 나누기(나머지)
             "bracket1" -> appendResult("(")      // 괄호 열기
             "bracket2" -> appendResult(")")      // 괄호 닫기
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     fun calculateResult(view: View) {
         try {
-            val expressionString = result.text.toString().replace("x", "*")
+            val expressionString = result.text.toString().replace("x", "*").replace("÷", "/")
             val expression = ExpressionBuilder(expressionString).build()
             val calculationResult = expression.evaluate()
             result.text = calculationResult.toString()
@@ -69,4 +69,12 @@ class MainActivity : AppCompatActivity() {
     private fun isWholeNumber(calculationResult: Double): Boolean {
         return calculationResult == calculationResult.toLong().toDouble()
     }
+
+    fun backspace(view: View) {
+        val currentText = result.text.toString()
+        if (currentText.isNotEmpty()) {
+            result.text = currentText.substring(0, currentText.length - 1)
+        }
+    }
+
 }
