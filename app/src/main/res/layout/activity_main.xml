@@ -6,7 +6,6 @@
 
     <TextView
         android:id="@+id/text"
-        android:text="0"
         android:gravity="right|bottom"
         android:paddingBottom="15dp"
         android:paddingRight="20dp"
@@ -64,7 +63,6 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
             android:layout_marginBottom="10dp"
-            android:onClick="onClick"
             android:text="AC" />
 
         <Button
@@ -152,7 +150,7 @@
             android:text="6" />
 
         <Button
-            android:id="@+id/X"
+            android:id="@+id/multiply"
             android:textSize="20sp"
             android:layout_width="90dp"
             android:layout_height="85dp"
@@ -161,7 +159,7 @@
             android:layout_marginRight="6dp"
             android:layout_marginBottom="10dp"
             android:onClick="onClick"
-            android:text="X" />
+            android:text="x" />
 
         <Button
             android:id="@+id/_1"
@@ -244,7 +242,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
             android:layout_marginBottom="10dp"
-            android:onClick="onClick"
+            android:onClick="calculateResult"
             android:text="=" />
 
         <Button

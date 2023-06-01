@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import net.objecthunter.exp4j.ExpressionBuilder
 
 class MainActivity : AppCompatActivity() {
     lateinit var result: TextView
@@ -19,47 +20,53 @@ class MainActivity : AppCompatActivity() {
 
         val initBtn = findViewById<Button>(R.id.AC)
         initBtn.setOnClickListener {
-            result.text = "0"
+            result.text = ""
         }
     }
 
     // 클릭한 버튼 id로 수행
     fun onClick(_view: View) {
         when(val id = _view.resources.getResourceEntryName(_view.id)) {
-            "plus" -> appendResult(false, "+")          // 덧셈
-            "subtract" -> appendResult(false, "-")      // 뺄셈
-            "X" -> appendResult(false, "X")             // 곱셈
-            "division" -> appendResult(false, "/")      // 나누기(몫)
-            "remain" -> appendResult(false, "%")        // 나누기(나머지)
-            "bracket1" -> appendResult(false, "(")      // 괄호 열기
-            "bracket2" -> appendResult(false, ")")      // 괄호 닫기
-            "_." -> appendResult(false, ".")            // 소수점
-            
+            "plus" -> appendResult("+")          // 덧셈
+            "subtract" -> appendResult("-")      // 뺄셈
+            "multiply" -> appendResult("x")      // 곱셈
+            "division" -> appendResult("/")      // 나누기(몫)
+            "remain" -> appendResult("%")        // 나누기(나머지)
+            "bracket1" -> appendResult("(")      // 괄호 열기
+            "bracket2" -> appendResult(")")      // 괄호 닫기
+            "_." -> appendResult(".")            // 소수점
+
             // 숫자 버튼
             else -> {
                 val number = id.substring(1).toIntOrNull()
                 if (number != null && number in 0 .. 9) {
-                    appendResult(true, number.toString())
+                    appendResult(number.toString())
                 }
             }
         }
     }
 
-    private fun appendResult(isNumber: Boolean, value: String) {
-        if (isNumber) {
-            result.text = if (result.text == "0") value else result.text.toString() + value
-        }
+    private fun appendResult(value: String) {
+        result.append(value)
+    }
 
-        else {
-            if(value == "(" || value == ")") {
-                result.text = if (result.text == "0") value else result.text.toString() + value
+    fun calculateResult(view: View) {
+        try {
+            val expressionString = result.text.toString().replace("x", "*")
+            val expression = ExpressionBuilder(expressionString).build()
+            val calculationResult = expression.evaluate()
+            result.text = calculationResult.toString()
+
+            if (isWholeNumber(calculationResult)) {
+                result.text = calculationResult.toLong().toString()
             }
-
-            else if(result.text != "0") {
-                result.append(value)
-            }
-
-            else Toast.makeText(this, "완성 되지 않은 수식", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Log.e("Calculation Error", e.toString())
+            Toast.makeText(this, "Calculation error", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun isWholeNumber(calculationResult: Double): Boolean {
+        return calculationResult == calculationResult.toLong().toDouble()
     }
 }
