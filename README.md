@@ -6,6 +6,7 @@
 
 ## 🛠 Development Environment
   - Tool : `Android Studio`
+  - device : `Pixel 2 API 30`
 
 ## 📃 Main Composition
 
